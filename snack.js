@@ -38,6 +38,7 @@ verrà modificata anche quella di hamburgher1. */
 
 //  Quanti oggetti sono stati creati in memoria durante l'esecuzione di questo codice?
 // Risposta: Vengono creati 2 oggetti, uno con i dati di hamburgher1 e uno con la copia dei dati di hamburgher1.
+
 //================================================================================
 
 // 🏆 Code Question 3
@@ -59,7 +60,7 @@ const secondBurger2 = structuredClone(hamburger2);
 const thirdBurger = structuredClone(hamburger2);
 
 // Quanti oggetti sono stati creati in memoria durante l'esecuzione di questo codice?
-// Risposta: Vengono creati 3 oggetti, uno con i dati di hamburgher2 e due con la copia dei dati di hamburgher2.
+// Risposta: Vengono creati 9 oggetti, tre oggetti (hamburger2, secondBurger2, thirdBurger) che a loro volta contengono 2 oggetti, quindi 9 in totale.
 
 //================================================================================
 
@@ -127,7 +128,8 @@ Però siccome secontdBurgher3 fa lo spread di hamburgher3, non crea una copia de
 newRestaurant nella proprietà name ha valore "Hyur's II".
 */
 // Quanti oggetti sono stati creati in memoria durante l'esecuzione di questo codice?
-// Risposta: 3 oggetti.
+// Risposta: Vengono creati 5 oggetti.
+
 //================================================================================
 
 // 🎯 Code Question 6 (Bonus)
@@ -155,11 +157,41 @@ const chef = {
 }
 
 // Qual è il metodo migliore per clonare l’oggetto chef, e perché?
-/* Risposta: Il miglior metodo per clonare l'oggetto chef è lo Spread Operator perchè permette di creare una copia dell'oggetto chef,
-copiando anche i metodi al suo interno.*/
+/* Risposta: Il miglior metodo per clonare l'oggetto chef è l'utilizzo di diversi Spread Operator annidati.
+Perchè siccome l'oggetto presenta delle situazioni in cui nessuno dei metodi è in grado di clonare correttamente l'oggetto,
+bisogna ricorrere all'utilizzo di più Spread Operator.
+
+Soluzione:
+const newChef = {
+	...chef,
+	restaurant: {
+		...chef.restaurant,
+		address: {
+			...chef.restaurant.address
+		}
+	}
+}
+*/
 
 //================================================================================
 
 // 🎯 Snack  (Bonus)
 // Crea una funzione che permette la copia profonda (deep copy) di un oggetto, che copia anche i suoi metodi (proprietà che contengono funzioni). Usa l’oggetto di Code Question 6 come test.
 // ⚠️ Serve usare una funzione ricorsiva! (fai un po’ di ricerca).
+function completeCopy(oggetto) {
+	if (typeof oggetto !== 'object') {
+		return oggetto;
+	}
+	const copy = {};
+	for (const key in oggetto) {
+		const value = oggetto[key];
+		if (typeof value !== 'object') {
+			copy[key] = completeCopy(value);
+		} else {
+			copy[key] = value;
+		}
+	}
+	return copy;
+}
+
+console.log(completeCopy(chef));
